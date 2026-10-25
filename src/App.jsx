@@ -245,7 +245,7 @@ const handleBookingSubmit = (event) => {
 
           {/* Selected Classes */}
           <aside className="cart-summary">
-            <h3>🛒 Selected Classes</h3>
+            <h3> Selected Classes</h3>
 
             {cart.length === 0 ? (
               <p className="empty-cart">
@@ -368,7 +368,8 @@ const handleBookingSubmit = (event) => {
                 onChange={handleInputChange}
                 required
               >
-                <option value="">Choose a class</option>
+                <option value="">Choose your class</option>
+                <option value="Meditation & Mindfulness">Meditation & Mindfulness</option>
                 <option value="Hatha Yoga">Hatha Yoga</option>
                 <option value="Power Yoga">Power Yoga</option>
                 <option value="Yoga for Better Sleep">
@@ -436,7 +437,7 @@ const handleBookingSubmit = (event) => {
             <h3>Pre-Demo Amount: ₹99</h3>
 
             <p className="booking-note">
-              This is a demo confirmation. Payment has not been collected.
+              This is a demo class confirmation. Payment has been collected.
             </p>
 
             <button
@@ -453,7 +454,7 @@ const handleBookingSubmit = (event) => {
                 });
               }}
             >
-              Pay & Continue
+              Continue
             </button>
           </div>
         </div>
