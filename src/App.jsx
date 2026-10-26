@@ -17,7 +17,7 @@ function LoginPage({ email, mobile, onLoginSuccess }) {
     ) {
       onLoginSuccess();
     } else {
-      setError("Email ID ya password galat hai.");
+      setError("Email ID or PASSWORD is wrong.");
     }
   };
 
@@ -208,7 +208,7 @@ function App() {
         <div className="login-card">
           <h1>YOGA-AURA</h1>
           <h2>Login Successful!</h2>
-          <p>Welcome to your dashboard.</p>
+          <p>Welcome to your Yoga Classes.</p>
         </div>
       </div>
     );
@@ -522,8 +522,8 @@ function App() {
             <h3>Pre-Demo Amount: ₹99</h3>
 
             <p className="booking-note">
-              This is a demo confirmation only.
-              No real payment has been processed.
+              This is a demo classes confirmation.
+              payment has been processed.
             </p>
 
             <button
