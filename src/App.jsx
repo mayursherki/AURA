@@ -1,9 +1,62 @@
+
 import React, { useState } from "react";
 import "./App.css";
 
+function LoginPage({ email, mobile, onLoginSuccess }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    if (
+      username.trim().toLowerCase() ===
+        email.trim().toLowerCase() &&
+      password === mobile
+    ) {
+      onLoginSuccess();
+    } else {
+      setError("Email ID ya password galat hai.");
+    }
+  };
+
+  return (
+    <div className="login-page">
+      <form className="login-card" onSubmit={handleLogin}>
+        <h1>YOGA-AURA</h1>
+        <h2>Welcome Back!</h2>
+        <p>Login to your yoga account</p>
+
+        <label>Email / Username</label>
+        <input
+          type="email"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Registered email"
+          required
+        />
+
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Mobile number"
+          required
+        />
+
+        {error && <p className="login-error">{error}</p>}
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+}
+
 function App() {
   const [cart, setCart] = useState([]);
-   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +69,8 @@ function App() {
   const [locationMessage, setLocationMessage] = useState("");
   const [formMessage, setFormMessage] = useState("");
   const [booking, setBooking] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   const services = [
     {
@@ -70,65 +125,98 @@ function App() {
       return [...previousCart, service];
     });
   };
-   const handleInputChange = (event) => {
-  const { name, value } = event.target;
 
-  setFormData((previous) => ({
-    ...previous,
-    [name]: value,
-  }));
-};
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-const fetchCurrentLocation = () => {
-  setLocationMessage("");
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
 
-  if (!navigator.geolocation) {
-    setLocationMessage("Your browser does not support location.");
-    return;
-  }
+  const fetchCurrentLocation = () => {
+    setLocationMessage("");
 
-  setLocationMessage("Fetching location...");
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const location =
-        `${position.coords.latitude}, ${position.coords.longitude}`;
-
-      setFormData((previous) => ({
-        ...previous,
-        location,
-      }));
-
-      setLocationMessage("Location fetched successfully!");
-    },
-    () => {
+    if (!navigator.geolocation) {
       setLocationMessage(
-        "Location permission denied. You can enter your location manually."
+        "Your browser does not support location."
       );
+      return;
     }
-  );
-};
 
-const handleBookingSubmit = (event) => {
-  event.preventDefault();
-  setFormMessage("");
+    setLocationMessage("Fetching location...");
 
-  if (!formData.location.trim()) {
-    setFormMessage("Please enter or fetch your location.");
-    return;
-  }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location =
+          `${position.coords.latitude}, ${position.coords.longitude}`;
 
-  setBooking({ ...formData });
-  setShowBookingForm(false);
-};
+        setFormData((previous) => ({
+          ...previous,
+          location,
+        }));
+
+        setLocationMessage(
+          "Location fetched successfully!"
+        );
+      },
+      () => {
+        setLocationMessage(
+          "Location permission denied. You can enter your location manually."
+        );
+      }
+    );
+  };
+
+  const handleBookingSubmit = (event) => {
+    event.preventDefault();
+    setFormMessage("");
+
+    if (!formData.location.trim()) {
+      setFormMessage(
+        "Please enter or fetch your location."
+      );
+      return;
+    }
+
+    setBooking({ ...formData });
+    setShowBookingForm(false);
+  };
+
   const total = cart.reduce(
     (sum, item) => sum + item.price,
     0
   );
 
+  if (showLogin && booking) {
+    return (
+      <LoginPage
+        email={booking.email}
+        mobile={booking.mobile}
+        onLoginSuccess={() => {
+          setShowLogin(false);
+          setShowDashboard(true);
+        }}
+      />
+    );
+  }
+
+  if (showDashboard) {
+    return (
+      <div className="login-page">
+        <div className="login-card">
+          <h1>YOGA-AURA</h1>
+          <h2>Login Successful!</h2>
+          <p>Welcome to your dashboard.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="website">
-
+      
       {/* Navigation */}
       <nav className="navbar">
         <a href="#home" className="logo">
@@ -145,7 +233,6 @@ const handleBookingSubmit = (event) => {
 
       {/* Hero Section */}
       <section className="hero" id="home">
-
         <div className="hero-content">
           <p className="subtitle">WELCOME TO YOGA AURA</p>
 
@@ -166,7 +253,6 @@ const handleBookingSubmit = (event) => {
             Explore Our Services →
           </a>
 
-          {/* Pre-Demo Card */}
           <div className="predemo">
             <div className="predemo-icon">🪷</div>
 
@@ -178,16 +264,15 @@ const handleBookingSubmit = (event) => {
             </div>
 
             <button
-             type="button"
-  className="book-button"
-  onClick={() => setShowBookingForm(true)}
->
-  Book Now - ₹99
+              type="button"
+              className="book-button"
+              onClick={() => setShowBookingForm(true)}
+            >
+              Book Now - ₹99
             </button>
           </div>
         </div>
 
-        {/* Video Section */}
         <div className="hero-video">
           <video controls poster="/yoga-poster.jpg">
             <source src="/yoga-video.mp4" type="video/mp4" />
@@ -196,12 +281,10 @@ const handleBookingSubmit = (event) => {
 
           <p>Relax your mind. Strengthen your body.</p>
         </div>
-
       </section>
 
       {/* Services Section */}
       <section className="services" id="services">
-
         <div className="section-heading">
           <p className="subtitle">FIND YOUR PRACTICE</p>
           <h2>Our Yoga Services</h2>
@@ -211,7 +294,6 @@ const handleBookingSubmit = (event) => {
         </div>
 
         <div className="service-layout">
-
           <div className="service-container">
             {services.map((service) => {
               const added = cart.some(
@@ -225,9 +307,7 @@ const handleBookingSubmit = (event) => {
                   </div>
 
                   <h3>{service.name}</h3>
-
                   <p>{service.description}</p>
-
                   <h4>₹{service.price}</h4>
 
                   <button
@@ -243,9 +323,8 @@ const handleBookingSubmit = (event) => {
             })}
           </div>
 
-          {/* Selected Classes */}
           <aside className="cart-summary">
-            <h3> Selected Classes</h3>
+            <h3>Selected Classes</h3>
 
             {cart.length === 0 ? (
               <p className="empty-cart">
@@ -269,12 +348,13 @@ const handleBookingSubmit = (event) => {
 
                 <div className="cart-total">
                   <strong>Total:</strong>
-                  <strong>₹{total.toLocaleString("en-IN")}</strong>
+                  <strong>
+                    ₹{total.toLocaleString("en-IN")}
+                  </strong>
                 </div>
               </>
             )}
           </aside>
-
         </div>
       </section>
 
@@ -289,7 +369,6 @@ const handleBookingSubmit = (event) => {
 
         <div className="about-content">
           <p className="subtitle">ABOUT AURA</p>
-
           <h2>Your Journey to a Better You</h2>
 
           <p>
@@ -309,6 +388,7 @@ const handleBookingSubmit = (event) => {
         <p>Find your balance. Live mindfully.</p>
         <p>© 2026 Aura. All rights reserved.</p>
       </footer>
+
       {/* Booking Form */}
       {showBookingForm && (
         <div className="booking-overlay">
@@ -369,8 +449,10 @@ const handleBookingSubmit = (event) => {
                 required
               >
                 <option value="">Choose your class</option>
-                <option value="Meditation & Mindfulness">Meditation & Mindfulness</option>
                 <option value="Hatha Yoga">Hatha Yoga</option>
+                <option value="Meditation & Mindfulness">
+                  Meditation & Mindfulness
+                </option>
                 <option value="Power Yoga">Power Yoga</option>
                 <option value="Yoga for Better Sleep">
                   Yoga for Better Sleep
@@ -378,7 +460,9 @@ const handleBookingSubmit = (event) => {
                 <option value="Beginner Yoga">Beginner Yoga</option>
               </select>
 
-              <label htmlFor="booking-location">Current Location</label>
+              <label htmlFor="booking-location">
+                Current Location
+              </label>
 
               <button
                 type="button"
@@ -434,34 +518,27 @@ const handleBookingSubmit = (event) => {
             <p><strong>Mobile:</strong> {booking.mobile}</p>
             <p><strong>Yoga Class:</strong> {booking.yoga}</p>
             <p><strong>Location:</strong> {booking.location}</p>
+
             <h3>Pre-Demo Amount: ₹99</h3>
 
             <p className="booking-note">
-              This is a demo class confirmation. Payment has been collected.
+              This is a demo confirmation only.
+              No real payment has been processed.
             </p>
 
             <button
               type="button"
               className="submit-booking"
-              onClick={() => {
-                setBooking(null);
-                setFormData({
-                  name: "",
-                  email: "",
-                  mobile: "",
-                  yoga: "",
-                  location: "",
-                });
-              }}
+              onClick={() => setShowLogin(true)}
             >
-              Continue
+              Continue to Login
             </button>
           </div>
         </div>
       )}
-
     </div>
   );
 }
 
 export default App;
+
