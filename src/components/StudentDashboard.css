@@ -1,0 +1,127 @@
+
+.student-dashboard {
+  min-height: 100vh;
+  background: #f6f9f5;
+  font-family: Arial, sans-serif;
+}
+
+.student-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #245c46;
+  color: white;
+  padding: 28px 18px;
+  flex-shrink: 0;
+}
+
+.student-logo {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.student-logo-subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: #d1e8d8;
+}
+
+.student-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.student-menu-item {
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 13px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.student-menu-item:hover,
+.student-menu-item.active {
+  background: #43866b;
+}
+
+.student-main {
+  padding: 30px;
+  min-width: 0;
+}
+
+.student-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.student-welcome {
+  background: linear-gradient(120deg, #dcefe1, #f0f8ed);
+  padding: 35px;
+  border-radius: 18px;
+  margin-bottom: 30px;
+}
+
+.student-welcome h2 {
+  color: #245c46;
+  font-weight: bold;
+}
+
+.student-section-title {
+  margin-bottom: 20px;
+  color: #245c46;
+}
+
+.student-stat-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  height: 100%;
+}
+
+.student-stat-card h2 {
+  color: #245c46;
+  font-weight: bold;
+}
+
+.student-card-icon {
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.student-info-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.student-info-card h4 {
+  color: #245c46;
+}
+
+@media (max-width: 768px) {
+  .student-dashboard {
+    flex-direction: column;
+  }
+
+  .student-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .student-main {
+    padding: 18px;
+  }
+
+  .student-topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

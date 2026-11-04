@@ -1,6 +1,6 @@
-
 import React, { useState } from "react";
 import "./App.css";
+import StudentDashboard from "./components/StudentDashboard";
 
 function LoginPage({ email, mobile, onLoginSuccess }) {
   const [username, setUsername] = useState("");
@@ -202,17 +202,9 @@ function App() {
     );
   }
 
-  if (showDashboard) {
-    return (
-      <div className="login-page">
-        <div className="login-card">
-          <h1>YOGA-AURA</h1>
-          <h2>Login Successful!</h2>
-          <p>Welcome to your Yoga Classes.</p>
-        </div>
-      </div>
-    );
-  }
+ if (showDashboard) {
+  return <StudentDashboard />;
+}
 
   return (
     <div className="website">
