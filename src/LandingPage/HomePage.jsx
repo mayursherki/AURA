@@ -1,9 +1,10 @@
 import "./HomePage.css";
 import React, { useState } from "react";
 
-function LoginPage({ email, mobile, onLoginSuccess }) {
+function LoginPage({ email, mobile, onLoginSuccess, onBack }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = (event) => {
@@ -20,30 +21,48 @@ function LoginPage({ email, mobile, onLoginSuccess }) {
     }
   };
 
-  return (
+  
+    return (
     <div className="login-page">
+      <button
+        type="button"
+        className="back-arrow"
+        onClick={onBack}
+      >
+        ←
+      </button>
       <form className="login-card" onSubmit={handleLogin}>
         <h1>YOGA-AURA</h1>
         <h2>Welcome Back!</h2>
         <p>Login to your yoga account</p>
 
         <label>Email / Username</label>
-        <input
-          type="email"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Registered email"
-          required
-        />
+<input
+  type="email"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  placeholder="Registered email"
+  required
+/>
 
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Mobile number"
-          required
-        />
+
+<div className="password-wrapper">
+  <input
+    type={showPassword ? "text" : "password"}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    placeholder="Mobile number"
+    required
+  />
+
+  <span
+    className="password-eye"
+    onClick={() => setShowPassword(!showPassword)}
+  >
+    {showPassword ? "🙈" : "👁️"}
+  </span>
+</div>
 
         {error && <p className="login-error">{error}</p>}
 
@@ -188,11 +207,12 @@ function App() {
     0
   );
 
-  if (showLogin && booking) {
+  if (showLogin) {
     return (
       <LoginPage
-        email={booking.email}
-        mobile={booking.mobile}
+        email={booking?.email || ""}
+        mobile={booking?.mobile || ""}
+        onBack={() => setShowLogin(false)}
         onLoginSuccess={() => {
           setShowLogin(false);
           setShowDashboard(true);
@@ -224,10 +244,20 @@ function App() {
         </a>
 
         <div className="nav-links">
-          <a href="#home">Home</a>
-          <a href="#services">Services</a>
-          <a href="#about">About</a>
-        </div>
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#about">About</a>
+
+  <a
+    href="#login"
+    onClick={(e) => {
+      e.preventDefault();
+      setShowLogin(true);
+    }}
+  >
+    Login
+  </a>
+</div>
       </nav>
 
       {/* Hero Section */}
